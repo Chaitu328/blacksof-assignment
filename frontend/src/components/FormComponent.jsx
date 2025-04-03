@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
+axios.defaults.baseURL = "http://localhost:8082";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -18,18 +21,29 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({
-      fullName: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
-    // Reset submission status after 5 seconds
-    setTimeout(() => setSubmitted(false), 5000);
+    try {
+      // console.log('Payload:', formData);
+      const response = await axios.post(
+        '/api/contacts',
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+      if (response.status === 200) {
+        setSubmitted(true);
+        setFormData({
+          fullName: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+    }
   };
 
   return (

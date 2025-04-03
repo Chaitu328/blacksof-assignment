@@ -8,15 +8,21 @@ html, body, #root {
 
 /* added */
 /* Add this to App.css */
+/* Update in App.css */
 .scroll-container {
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   height: 100vh;
+  width: 100vw; /* Add this */
 }
 
 .scroll-section {
   scroll-snap-align: start;
-  height: 100vh;
+  min-height: 100vh; /* Change from height to min-height */
+  width: 100%;
+  display: flex; /* Add flex layout */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
 }
 
 .logo {
