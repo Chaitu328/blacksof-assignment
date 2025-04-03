@@ -1,5 +1,5 @@
 import Automotive from '../components/Automotive';
-import Footer from '../components/footer';
+import Footer from "../components/Footer"
 import ContactForm from '../components/formComponent';
 import Header from '../components/Header'
 import HeroPage from '../components/HeroPage'
