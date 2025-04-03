@@ -1,5 +1,5 @@
 import NotFoundComponent from '../components/NotFoundComponent';
-import Footer from '../components/footer';
+import Footer from "../components/Footer"
 import Header from '../components/Header';
 
 function NotFoundPage() {
