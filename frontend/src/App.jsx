@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import { HashRouter,Routes,Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/Login';
@@ -10,7 +10,7 @@ import './components/axiosConfig'
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           {/* Public Routes */}
           <Route path='/' element={<HomePage />} />
@@ -24,7 +24,7 @@ function App() {
           {/* 404 Catch-all */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require('cors')
 const mongoose = require("mongoose");
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 
+
 bodyParser = require('body-parser'),
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -23,7 +25,6 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8081',
   'https://blacksof-frontend.vercel.app',
-  
 ];
 
 app.use(helmet());
