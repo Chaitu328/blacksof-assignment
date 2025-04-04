@@ -122,6 +122,7 @@ const Automotive = () => {
               className="max-w-md" 
             />
           </div>
+          
           <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${activeSection === 'commercial' ? 'opacity-100' : 'opacity-0'}`}>
             <img 
               src="/api/placeholder/500/300" 

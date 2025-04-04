@@ -40,7 +40,7 @@ require('./config/passport')(passport);
 const authRoutes = require('./routes/auth.routes');
 const formRoutes = require('./routes/form.routes');
 app.use('/api/auth', authRoutes);
-app.use('/api/contacts', formRoutes);
+app.use('/api', formRoutes);
 
 app.listen(PORT, () => {
     console.log("Server Listening at", PORT);

@@ -1,51 +1,47 @@
+// auth.test.js
 const request = require('supertest');
 const express = require('express');
-const authController = require('../controller/auth.controller'); // Corrected path
-const authService = require('../services/auth.service');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-// Mock Express app
+const authRouter = require('../routes/auth.routes');
+
 const app = express();
 app.use(express.json());
-app.post('/login', authController.login);
+app.use('/auth', authRouter);
 
-// Mock authService
-jest.mock('../services/auth.service');
+describe('POST /auth/login', () => {
+  const testAdminKey = 'correct-admin-key';
+  const hashedAdminKey = bcrypt.hashSync(testAdminKey, 10);
+  const jwtSecret = 'test-secret';
 
-describe('Auth Controller - Login', () => {
-  afterEach(() => {
-    jest.clearAllMocks(); // Reset mocks after each test
+  beforeAll(() => {
+    process.env.ADMIN_KEY_HASH = hashedAdminKey;
+    process.env.JWT_SECRET = jwtSecret;
   });
 
-  test('✅ Should return token on valid admin key', async () => {
-    authService.authenticateAdmin.mockResolvedValue('mocked-jwt-token');
-
-    const response = await request(app)
-      .post('/login')
-      .send({ adminKey: 'valid-key' });
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('token', 'mocked-jwt-token');
-    expect(authService.authenticateAdmin).toHaveBeenCalledWith('valid-key');
+  it('should return 400 if admin key is not provided', async () => {
+    const res = await request(app).post('/auth/login').send({});
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toBe('Admin key is required');
   });
 
-  test('❌ Should return 400 if adminKey is missing', async () => {
-    const response = await request(app).post('/login').send({});
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({ message: 'Admin key is required' });
-    expect(authService.authenticateAdmin).not.toHaveBeenCalled();
+  it('should return 401 for invalid admin key', async () => {
+    const res = await request(app).post('/auth/login').send({ adminKey: 'wrong-key' });
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe('Invalid admin key');
   });
 
-  test('❌ Should return 401 on invalid admin key', async () => {
-    authService.authenticateAdmin.mockRejectedValue(new Error('Invalid admin key'));
+  it('should return JWT token for valid admin key', async () => {
+    const res = await request(app).post('/auth/login').send({ adminKey: testAdminKey });
 
-    const response = await request(app)
-      .post('/login')
-      .send({ adminKey: 'wrong-key' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(typeof res.body.token).toBe('string');
+    expect(res.body.expiresIn).toBe(3600);
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Invalid admin key');
+    // Optional: Verify the token content
+    const decoded = jwt.verify(res.body.token, jwtSecret);
+    expect(decoded.admin).toBe(true);
   });
 });

@@ -1,86 +1,94 @@
 const request = require('supertest');
 const express = require('express');
-const formService = require('../services/form.service');
+const jwt = require('jsonwebtoken');
 
-// Mock Express app
+// Mocks
+jest.mock('../services/form.service');
+jest.mock('../validation/form.validation');
+
+const formService = require('../services/form.service');
+const { validateFormSubmission } = require('../validation/form.validation');
+const formRouter = require('../routes/form.routes');
+
 const app = express();
 app.use(express.json());
-app.use('/contact', require('../routes/form.routes')); 
+app.use('/api', formRouter);
 
-// Mock formService
-jest.mock('../services/form.service');
+const mockToken = jwt.sign({ admin: true }, 'test-secret');
 
-describe('Contact Form API', () => {
-  afterEach(() => {
-    jest.clearAllMocks(); // Reset mocks after each test
+beforeAll(() => {
+  process.env.JWT_SECRET = 'test-secret';
+});
+
+describe('POST /api/contacts', () => {
+  it('should return 400 for validation error', async () => {
+    validateFormSubmission.mockReturnValue({ error: { details: [{ message: 'Invalid input' }] } });
+
+    const res = await request(app).post('/api/contacts').send({ name: '' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe('Invalid input');
   });
 
-  // ✅ Test form submission (POST /)
-  test('✅ Should submit a form successfully', async () => {
-    const formData = {
-      fullName: 'John Doe',
-      email: 'john@example.com',
-      subject: 'Test Subject',
-      message: 'This is a test message'
-    };
+  it('should return 201 and save form data', async () => {
+    validateFormSubmission.mockReturnValue({ error: null });
+    const fakeSubmission = { id: 1, name: 'Test User', email: 'test@example.com' };
+    formService.createFormSubmission.mockResolvedValue(fakeSubmission);
 
-    const mockResponse = { id: '12345', ...formData };
+    const res = await request(app)
+      .post('/api/contacts')
+      .send(fakeSubmission);
 
-    formService.createFormSubmission.mockResolvedValue(mockResponse);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual(fakeSubmission);
+  });
+});
 
-    const response = await request(app).post('/contact').send(formData);
-
-    expect(response.status).toBe(201);
-    expect(response.body).toMatchObject(mockResponse);
-    expect(formService.createFormSubmission).toHaveBeenCalledWith(formData);
+describe('GET /api/admin/contacts', () => {
+  it('should return 401 without token', async () => {
+    const res = await request(app).get('/api/admin/contacts');
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe('Access denied. No token provided');
   });
 
-  // ❌ Test missing field validation
-  test('❌ Should return 400 when required field is missing', async () => {
-    const response = await request(app).post('/contact').send({
-      email: 'john@example.com',
-      subject: 'Test Subject'
-    });
+  it('should return 200 with submissions if authenticated', async () => {
+    const fakeSubmissions = [{ id: 1, name: 'Test' }];
+    formService.getAllSubmissions.mockResolvedValue(fakeSubmissions);
 
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error');
-    expect(formService.createFormSubmission).not.toHaveBeenCalled();
+    const res = await request(app)
+      .get('/api/admin/contacts')
+      .set('Authorization', `Bearer ${mockToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual(fakeSubmissions);
+  });
+});
+
+describe('DELETE /api/admin/contacts/:id', () => {
+  it('should return 401 without token', async () => {
+    const res = await request(app).delete('/api/admin/contacts/123');
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe('Access denied. No token provided');
   });
 
-  // ✅ Test getting all submissions (GET /)
-  test('✅ Should fetch all submissions', async () => {
-    const mockSubmissions = [
-      { id: '123', fullName: 'Alice', email: 'alice@example.com', message: 'Hello' },
-      { id: '456', fullName: 'Bob', email: 'bob@example.com', message: 'Hi' }
-    ];
-
-    formService.getAllSubmissions.mockResolvedValue(mockSubmissions);
-
-    const response = await request(app).get('/contact');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockSubmissions);
-    expect(formService.getAllSubmissions).toHaveBeenCalled();
-  });
-
-  // ✅ Test deleting a submission (DELETE /:id)
-  test('✅ Should delete a submission', async () => {
-    formService.deleteSubmission.mockResolvedValue(true);
-
-    const response = await request(app).delete('/contact/123');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Submission deleted successfully');
-    expect(formService.deleteSubmission).toHaveBeenCalledWith('123');
-  });
-
-  // ❌ Test deleting a non-existent submission
-  test('❌ Should return 404 if submission not found', async () => {
+  it('should return 404 if submission not found', async () => {
     formService.deleteSubmission.mockResolvedValue(null);
 
-    const response = await request(app).delete('/contact/999');
+    const res = await request(app)
+      .delete('/api/admin/contacts/999')
+      .set('Authorization', `Bearer ${mockToken}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'Submission not found');
+    expect(res.statusCode).toBe(404);
+    expect(res.body.error).toBe('Submission not found');
+  });
+
+  it('should return success if deletion is successful', async () => {
+    formService.deleteSubmission.mockResolvedValue(true);
+
+    const res = await request(app)
+      .delete('/api/admin/contacts/1')
+      .set('Authorization', `Bearer ${mockToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('Submission deleted successfully');
   });
 });

@@ -35,7 +35,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get('/api/contacts', {
+        const response = await axios.get('/api/admin/contacts', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
           }
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
     // console.log(id);
     
     try {
-      await axios.delete(`/api/contacts/${id}`, {
+      await axios.delete(`/api/admin/contacts/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }

@@ -10,37 +10,6 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   setError('');
-  
-  //   try {
-  //     const response = await fetch('http://localhost:8082/api/auth/login', {
-  //       method: 'POST',
-  //       headers: { 
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ adminKey: password }),
-  //       credentials: 'include'
-  //     });
-  
-  //     const data = await response.json();
-      
-  //     if (!response.ok) {
-  //       throw new Error(data.message || 'Login failed');
-  //     }
-  
-  //     localStorage.setItem('adminToken', data.token);
-  //     navigate('/admin/contacts');
-  //   } catch (err) {
-  //     setError(err.message || 'Login failed. Please try again.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
