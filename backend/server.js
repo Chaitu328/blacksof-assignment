@@ -6,7 +6,7 @@ const passport = require('passport');
 const helmet = require('helmet');
 
 
-const DB_URI = "mongodb://127.0.0.1:27017";
+const DB_URI = process.env.MONGO_URI;
 
 const app = express();
 const PORT = 8082;
