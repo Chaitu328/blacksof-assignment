@@ -50,10 +50,11 @@
 ## 🔧 **Component Architecture Overview**
 ### **Backend (Express.js)**
 📌 **Key Routes:**
-- `POST /api/auth/login` → Admin login (verifies hashed admin key & returns JWT).  
-- `POST /api/contacts` → Submit a contact form.  
-- `GET /api/admin/contacts` → Fetch all form submissions (Admin-only).  
-- `DELETE /api/admin/contacts/:id` → Delete a submission (Admin-only).  
+
+- `POST [/api/auth/login](https://blacksof-assignment-vt1u.onrender.com/api/auth/login)` → Admin login (verifies hashed admin key & returns JWT).  
+- `POST [/api/contacts](https://blacksof-assignment-vt1u.onrender.com/api/contacts)` → Submit a contact form.  
+- `GET [/api/admin/contacts](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts)` → Fetch all form submissions (Admin-only).  
+- `DELETE [/api/admin/contacts/:id](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts/:id)` → Delete a submission (Admin-only).  
 
 📌 **Key Middleware:**
 - `auth.middleware.js` → Protects admin routes by verifying JWT.  
