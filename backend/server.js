@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8081',
-  'https://blacksoff-frontend.vercel.app',
+  'https://blacksof-frontend.vercel.app/',
   
 ];
 
