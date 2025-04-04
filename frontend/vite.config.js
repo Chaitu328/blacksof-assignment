@@ -10,5 +10,5 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true
   },
-  base: '/' // Important for correct asset paths
+  base: './' // Important for correct asset paths
 })
