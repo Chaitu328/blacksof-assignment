@@ -1,19 +1,3 @@
-Here's the full **README.md** file with all details, including **JWT_SECRET** in the `.env` setup.  
-
----
-
-### **README.md**  
-
-```md
-# 🚀 Contact Form Admin Panel  
-
-A secure contact form with **admin authentication**, built using:  
-- 🖥️ **Frontend**: React, Tailwind CSS  
-- 🏗️ **Backend**: Express.js, MongoDB  
-- 🔐 **Authentication**: JWT (JSON Web Tokens)  
-
----
-
 ## 📌 Project Setup Instructions  
 
 ### **1️⃣ Backend Setup**  
