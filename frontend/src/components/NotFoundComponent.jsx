@@ -7,7 +7,8 @@ const NotFoundComponent = () => {
       <p className="text-gray-800 text-xl mb-12">The page you have requested doesn't exist.</p>
       <a 
         href="/" 
-        className="bg-blue-400 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full transition duration-300"
+        className="bg-blue-400 hover:bg-blue-500 text-black hover:text-black font-medium py-3 px-8 rounded-full transition duration-300"
+        style={{ color: "black" }}
       >
         Go to Homepage
       </a>
