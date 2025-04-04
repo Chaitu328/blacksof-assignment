@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Passenger from "../assets/passenger.mp4";
+import Commercial from "../assets/commercial.mp4";
 
 const Automotive = () => {
   const [activeSection, setActiveSection] = useState('passenger');
@@ -116,19 +118,11 @@ const Automotive = () => {
 
         <div className="w-1/2 relative">
           <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${activeSection === 'passenger' ? 'opacity-100' : 'opacity-0'}`}>
-            <img 
-              src="/api/placeholder/500/300" 
-              alt="Passenger vehicle parts showing interior and exterior components" 
-              className="max-w-md" 
-            />
+            <video src={Passenger} autoPlay loop muted className="max-w-md"> </video>
           </div>
           
           <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${activeSection === 'commercial' ? 'opacity-100' : 'opacity-0'}`}>
-            <img 
-              src="/api/placeholder/500/300" 
-              alt="Commercial vehicle parts including heavy-duty components" 
-              className="max-w-md" 
-            />
+            <video src={Commercial} autoPlay loop muted className="max-w-md"> </video>
           </div>
         </div>
       </div>

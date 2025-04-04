@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-axios.defaults.baseURL = "http://localhost:8082";
 
 const AdminDashboard = () => {
   const [contacts, setContacts] = useState([]);

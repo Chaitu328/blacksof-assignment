@@ -5,8 +5,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashboard from './pages/AdminDashboard';
-import VideoTransition from './pages/framermotion';
-
+import './components/axiosConfig'
 
 function App() {
   return (
@@ -22,11 +21,6 @@ function App() {
             <Route path='/admin/contacts' element={<AdminDashboard />} />
           </Route>
           
-          {/* framer */}
-          <Route>
-          <Route path='/framer' element={<VideoTransition />} />
-          </Route>
-
           {/* 404 Catch-all */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
