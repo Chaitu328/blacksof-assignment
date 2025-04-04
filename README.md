@@ -56,10 +56,10 @@
 - `DELETE /api/admin/contacts/:id` → Delete a submission (Admin-only).  
 
 📌 **Key Middleware:**
-- `authenticate` → Protects admin routes by verifying JWT.  
+- `auth.middleware.js` → Protects admin routes by verifying JWT.  
 
 📌 **Services:**
-- `formService.js` → Handles MongoDB operations for contact submissions.  
+- `form.service.js` → Handles MongoDB operations for contact submissions.  
 
 ---
 
@@ -70,7 +70,7 @@
 - `AdminDashboard.jsx` → Dashboard for viewing/deleting submissions.  
 
 📌 **Routing (React Router)**
-- `/` → Contact form.  
+- `/` → HomePage.  
 - `api/login` → Admin login.  
 - `api/admin/contacts` → Admin panel (protected).  
 
