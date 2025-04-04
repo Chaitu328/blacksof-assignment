@@ -93,6 +93,29 @@
 
 ---
 
+## **📌 Testing Strategy**  
+
+### **✅ Integration Tests (Supertest + Jest)**  
+📌 **Authentication Tests**  
+- Validates admin login with correct credentials  
+- Ensures JWT token is returned  
+- Prevents unauthorized access  
+
+📌 **Form Submission Tests**  
+- Ensures validation for invalid form submissions  
+- Successfully stores valid contact forms  
+
+📌 **Admin Routes Tests**  
+- Ensures only authenticated admins can access forms  
+- Validates deletion of submissions  
+
+### **🛠 Running Tests**  
+```sh
+npm test
+```  
+
+---
+
 ## 🔐 **Security Measures Taken**
 - **🔑 Admin Authentication** → Uses **bcrypt** for secure password hashing.  
 - **🔐 JWT-Based Authentication** → Protects admin routes with a token.  
@@ -121,3 +144,8 @@
   ```
 - Ensure `.env` is configured correctly before running the backend.  
 - The app follows **best security & performance practices**.  
+
+
+
+
+
