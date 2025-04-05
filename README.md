@@ -49,12 +49,49 @@
 
 ## 🔧 **Component Architecture Overview**
 ### **Backend (Express.js)**
-📌 **Key Routes:**
+#### 🔐 Authentication
 
-- `POST [/api/auth/login](https://blacksof-assignment-vt1u.onrender.com/api/auth/login)` → Admin login (verifies hashed admin key & returns JWT).  
-- `POST [/api/contacts](https://blacksof-assignment-vt1u.onrender.com/api/contacts)` → Submit a contact form.  
-- `GET [/api/admin/contacts](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts)` → Fetch all form submissions (Admin-only).  
-- `DELETE [/api/admin/contacts/:id](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts/:id)` → Delete a submission (Admin-only).  
+- `POST [/api/auth/login](https://blacksof-assignment-vt1u.onrender.com/api/auth/login)`  
+  → Admin login. Verifies the hashed admin key and returns a **JWT token**.  
+  **Request Body:**
+  ```json
+  {
+    "adminKey": "Abracadabra"
+  }
+  ```
+  **Response:**
+  ```json
+  {
+    "token": "<JWT_TOKEN>"
+  }
+  ```
+
+---
+
+#### 📬 Contact Form
+
+- `POST [/api/contacts](https://blacksof-assignment-vt1u.onrender.com/api/contacts)`  
+  → Submit a contact form.
+
+---
+
+#### 📂 Admin - Contact Management  
+> These endpoints require a **Bearer Token** (JWT) in the `Authorization` header.
+
+- `GET [/api/admin/contacts](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts)`  
+  → Fetch all contact form submissions.  
+  **Headers:**
+  ```
+  Authorization: Bearer <JWT_TOKEN>
+  ```
+
+- `DELETE [/api/admin/contacts/:id](https://blacksof-assignment-vt1u.onrender.com/api/admin/contacts/:id)`  
+  → Delete a specific form submission by ID.  
+  **Headers:**
+  ```
+  Authorization: Bearer <JWT_TOKEN>
+  ```
+
 
 📌 **Key Middleware:**
 - `auth.middleware.js` → Protects admin routes by verifying JWT.  
